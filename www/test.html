@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <!--
+        Customize this policy to fit your own app's needs. For more guidance, see:
+            https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
+        Some notes:
+            * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+                * Enable inline JS: add 'unsafe-inline' to default-src
+        -->
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="initial-scale=1, width=device-width, viewport-fit=cover">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <title>A Pp (lick a shun)</title>
+    </head>
+    <body>
+        <div id="edit" class="editor" contenteditable>
+        </div>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script type="text/javascript" src="js/editable.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script>
+            "use strict";
+
+            var ee = document.getElementById('edit');
+
+            var editable = new Editable({
+              defaultBehavior: true
+            });
+
+            editable.add(ee);
+
+            editable.on('change', elem => {
+              const currentContent = editable.getContent(elem);
+            });
+            editable.on('split', (elem, before, after, cursor) => {
+                // before and after are document fragments with the content
+                  // from before and after the cursor in it.
+                  console.log('split', elem);
+            });
+
+            editable.on('switch', (elem, direction, cursor) => {
+              console.log(direction);
+              if (direction === 'after') {
+                // your code...
+              } else if (direction === 'before') {
+                // your code...
+              }
+            });
+        </script>
+    </body>
+
+</html>

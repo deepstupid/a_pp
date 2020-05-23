@@ -15,7 +15,8 @@
   "dependencies": {
     "cordova-android": "latest",
     "cordova-browser": "latest",
-    "cordova-electron": "latest"
+    "cordova-electron": "latest",
+    "n3": "^1.3.7"
   },
   "devDependencies": {
     "cordova-plugin-whitelist": "latest"

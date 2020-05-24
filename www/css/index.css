@@ -38,6 +38,15 @@ body {
     font-family: mono;
 }
 
+.meta {
+  font-size: 75%;
+  max-height: 5em;
+  overflow: auto;
+  opacity: 0.75;
+  padding-left: 2em;
+  position: relative;
+}
+
 h1 {
     font-size:24px;
     font-weight:normal;

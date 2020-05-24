@@ -12,8 +12,8 @@ function search(q) {
       fields: {
           n: {boost: 2},
           s: {boost: 1},
-          expand: false /*true */
       }
+      //,expand: false /*true */
   });
 }
 

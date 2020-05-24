@@ -64,15 +64,31 @@ command IDs (W3C)
 
             editable.add(ee);
 
+            var changing = false;
             editable.on('change', elem => {
-              const x = elem.innerText; //editable.getContent(elem);
+              if (changing) return;
+
+              changing = true;
+
+              var e = $(elem);
+              var m = e.find('.meta');
+              if (m.length == 0)
+                e.prepend(m = $('<div class="meta"></div>'));
+
+              m.html('');
+
+              const x = elem.textContent.trim();
+              console.log(x);
               const xx = x.split(' ');
 
               for (var i in xx) {
                 const xxx = xx[i].trim();
+                if (xxx.length < 1) continue;
                 const y = search(xxx);
                 console.log(y);
+                m.append(JSON.stringify(y,null,null));
               }
+              changing = false;
             });
 
             //TODO selection and surrounding quotes as hint for multi-token query or other combining relation

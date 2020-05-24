@@ -28,19 +28,26 @@
             "use strict";
 
             var index = elasticlunr(function () {
-                this.addField('name'); //label
-                this.addField('super'); //list of supercategories
-                this.addField('sub'); //list of subcategories
-                this.setRef('id'); //URI
+                this.addField('n'); //label
+                this.addField('S'); //list of supercategories
+                this.addField('s'); //list of subcategories
+                this.setRef('i'); //URI
             });
-            index.addDoc({
-                "id": 1,
-                "name": "something",
-                "super": ["x","y","z"],
-                "sub": ["abc","b","c"]
+
+            $.get('cat.json', (x)=>{
+              //console.log(x);
+              //console.log('categories', x);
+              console.log('loading categories...');
+              var count = 0;
+              for(var i in x) {
+                const item = x[i];
+                item.i = i;
+                index.addDoc(item);
+                count++;
+              }
+              console.log(count, 'categories loaded.');
+
             });
-            console.log(index.search("something"));
-            console.log(index.search("abc"));
 
             var ee = document.getElementById('edit');
 

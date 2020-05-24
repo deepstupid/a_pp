@@ -2,6 +2,8 @@ const N3 = require('n3');
 const fs = require('fs');
 const parser = new N3.Parser();
 
+const outputRaw = true;
+
 //https://dumps.wikimedia.org/other/categoriesrdf/latest/
 const rdfStream = fs.createReadStream('/home/me/d/simplewiki-20200516-categories.2.ttl');
 
@@ -22,7 +24,25 @@ function X(id) {
 parser.parse(rdfStream, (err, q, prefixes)=>{
     if (!q) {
       //done
-      console.log(JSON.stringify(d,null,null));
+      if (outputRaw) {
+        console.log(JSON.stringify(d,null,null));
+      } else {
+          const lunr = require('elasticlunr');
+          const index = lunr(function () {
+              this.addField('n'); //label
+              this.addField('S'); //list of supercategories
+              this.addField('s'); //list of subcategories
+              this.setRef('i'); //URI
+          });
+          var count = 0;
+          for(var i in d) {
+            const item = d[i];
+            item.i = i;
+            index.addDoc(item);
+            count++;
+          }
+          console.log(JSON.stringify(index.toJSON(),null,null));
+      }
       return;
     }
 

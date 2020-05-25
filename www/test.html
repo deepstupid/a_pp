@@ -69,34 +69,56 @@ command IDs (W3C)
             const updatePeriodMS = 25;
             const minTokenLength = 3;
 
+            var changing = false;
             editable.on('change', _.throttle(elem => {
+              if (changing) return;
+              changing = true;
 
-              var e = $(elem);
-              var m = e.find('.meta');
-              if (m.length == 0)
-                e.prepend(m = $('<div class="meta"></div>'));
+              setTimeout(()=>{
+                var e = $(elem);
+                var m = e.find('.meta');
+                if (m.length == 0)
+                  e.prepend(m = $('<div class="meta"></div>'));
 
-              m.html('');
+                const xx = new Set(); //unigrams
 
-              const x = elem.textContent.trim();
-              const xx = x.split(' ');
+                for (var k in elem.childNodes) {
+                  var n = elem.childNodes[k];
+                  if (n.data!==undefined && n.childNodes.length===0) {
+                    xx.add(n.data.trim());
+                  }
+                }
 
-              for (var i in xx) {
-                const xxx = xx[i].trim();
-                if (xxx.length < minTokenLength) continue;
-                const y = search(xxx);
-                if (y.length < 1) continue;
-                //console.log(y);
+                const hints = new Map();
 
-                //var z = JSON.stringify(y,null,null);
-                var z = _.map(y, yy => {
-                  //console.log(yy.doc);
-                  return $(document.createElement('button')).text(yy.doc.n);
+                xx.forEach(xxx => {
+                  if (xxx.length < minTokenLength) return;
+                  const y = search(xxx);
+                  if (y.length < 1 || y.length > 256) return;
+                  //console.log(y);
+
+                  //var z = JSON.stringify(y,null,null);
+                  _.forEach(y, yy => {
+
+                    //TODO merge with existing
+                    hints.set(
+                       yy.doc.i,
+                       yy.doc
+                     );
+                  });
                 });
-                console.log(z);
 
-                m.append(z);
-              }
+                var z = [];
+                hints.forEach((v,k)=>{
+                  z.push(
+                    $(document.createElement('button')).text(v.n)
+                  );
+                });
+
+                m.html(z);
+
+                changing = false;
+              });
             }, updatePeriodMS));
 
             //TODO selection and surrounding quotes as hint for multi-token query or other combining relation

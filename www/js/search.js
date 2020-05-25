@@ -34,13 +34,14 @@ if (loaded) {
 }
 
 if (!loaded) {
+  var noLeaves = false;
   $.get('cat.json', x=>{
     //console.log(x);
     //console.log('categories', x);
     var count = 0;
     for(var i in x) {
       const item = x[i];
-      if (item.s!==undefined) { //OR other filter
+      if (!noLeaves || item.s!==undefined) { //OR other filter
         item.i = i;
         index.addDoc(item);
         count++;

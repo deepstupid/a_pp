@@ -21,7 +21,9 @@
         <div id="edit" class="editor" contenteditable>
         </div>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/elasticlunr/0.9.6/elasticlunr.min.js"></script>
+        <script type="text/javascript" src="js/lib/memoizerific.js"></script>
         <script type="text/javascript" src="js/lib/editable.js"></script>
         <script type="text/javascript" src="js/search.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
@@ -64,11 +66,10 @@ command IDs (W3C)
 
             editable.add(ee);
 
-            var changing = false;
-            editable.on('change', elem => {
-              if (changing) return;
+            const updatePeriodMS = 25;
+            const minTokenLength = 3;
 
-              changing = true;
+            editable.on('change', _.throttle(elem => {
 
               var e = $(elem);
               var m = e.find('.meta');
@@ -78,18 +79,25 @@ command IDs (W3C)
               m.html('');
 
               const x = elem.textContent.trim();
-              console.log(x);
               const xx = x.split(' ');
 
               for (var i in xx) {
                 const xxx = xx[i].trim();
-                if (xxx.length < 1) continue;
+                if (xxx.length < minTokenLength) continue;
                 const y = search(xxx);
-                console.log(y);
-                m.append(JSON.stringify(y,null,null));
+                if (y.length < 1) continue;
+                //console.log(y);
+
+                //var z = JSON.stringify(y,null,null);
+                var z = _.map(y, yy => {
+                  //console.log(yy.doc);
+                  return $(document.createElement('button')).text(yy.doc.n);
+                });
+                console.log(z);
+
+                m.append(z);
               }
-              changing = false;
-            });
+            }, updatePeriodMS));
 
             //TODO selection and surrounding quotes as hint for multi-token query or other combining relation
 

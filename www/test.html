@@ -22,9 +22,10 @@
         </div>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/elasticlunr/0.9.6/elasticlunr.min.js"></script>
+        <script type="text/javascript" src="js/lib/elasticlunr.js"></script>
         <script type="text/javascript" src="js/lib/memoizerific.js"></script>
         <script type="text/javascript" src="js/lib/editable.js"></script>
+        <script type="text/javascript" src="js/lib/JSONC.js"></script>
         <script type="text/javascript" src="js/search.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script>
@@ -73,12 +74,13 @@ command IDs (W3C)
             editable.on('change', _.throttle(elem => {
               if (changing) return;
               changing = true;
-
               setTimeout(()=>{
                 var e = $(elem);
                 var m = e.find('.meta');
                 if (m.length == 0)
-                  e.prepend(m = $('<div class="meta"></div>'));
+                  e.prepend(m = $('<div class="meta" contenteditable="false"></div>'));
+                else
+                  m.html('')
 
                 const xx = new Set(); //unigrams
 
@@ -123,6 +125,10 @@ command IDs (W3C)
 
             //TODO selection and surrounding quotes as hint for multi-token query or other combining relation
 
+          /*  editable.on('focus', ()=>{
+            });
+            editable.on('blur', ()=>{
+            }); */
             editable.on('split', (elem, before, after, cursor) => {
                 // before and after are document fragments with the content
                   // from before and after the cursor in it.

@@ -24,17 +24,26 @@ body {
   margin-bottom: 0.5em;
   margin-left: 0.5em;
   clear: both;
-}
-
-
-.meta {
-  height: 100%;
+  background-color: black;
+  opacity: 0.9;
+  max-height: 8em;
+  min-height: 1em;
   overflow: auto;
-  opacity: 0.75;
-  float: right;
-  max-width: 50%;
 }
-.meta * {
-  font-size: 75%;
 
+
+.editor:focused .meta {
+  display: none ;
+}
+
+.editor .meta {
+  max-width: 100%;
+  overflow: auto;
+  opacity: 0.25;
+  position: absolute;
+  display:block;
+}
+
+.editor.meta * {
+  scale: 0.75;
 }

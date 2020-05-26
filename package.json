@@ -17,7 +17,8 @@
     "cordova-browser": "latest",
     "cordova-electron": "latest",
     "n3": "latest",
-    "elasticlunr": "latest"
+    "elasticlunr": "latest",
+    "json-compress": "Alamantus/JSON-Compress"
   },
   "devDependencies": {
     "cordova-plugin-whitelist": "latest"
